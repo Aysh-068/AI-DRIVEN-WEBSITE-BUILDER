@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ website_data.title | default('Website Preview') }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            {% set theme = website_data.theme | default({}) %}
+            --primary-color: {{ theme.primary_color | default('#3498db') }};
+            --secondary-color: {{ theme.secondary_color | default('#2c3e50') }};
+            --background-color: {{ theme.background_color | default('#f4f7f6') }};
+            --text-color: {{ theme.text_color | default('#333') }};
+            --heading-color: {{ theme.heading_color | default('#2c3e50') }};
+            --font-family: {{ theme.font_family | default('Inter, sans-serif') }};
+            --section-bg-color: {{ theme.section_bg_color | default('#ffffff') }};
+            --service-item-bg-color: {{ theme.service_item_bg_color | default('#f9f9f9') }};
+            --border-color: {{ theme.border_color | default('#eee') }};
+            --shadow-color: {{ theme.shadow_color | default('rgba(0, 0, 0, 0.1)') }};
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: var(--section-bg-color);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: var(--heading-color);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+        header p {
+            color: var(--text-color);
+            font-size: 1.2em;
+        }
+        section {
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        section:last-of-type {
+            border-bottom: none;
+        }
+        section h2 {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .hero-section {
+            background-color: var(--secondary-color);
+            color: #ffffff;
+            padding: 80px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        .hero-section h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .hero-section p {
+            font-size: 1.5em;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            color: #ffffff;
+        }
+        .about-section p {
+            text-align: justify;
+            font-size: 1.1em;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .service-item {
+            background-color: var(--service-item-bg-color);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .service-item:hover {
+            transform: translateY(-5px);
+        }
+        .service-item h3 {
+            color: var(--heading-color);
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .service-item p {
+            font-size: 0.95em;
+            color: var(--text-color);
+        }
+        .contact-info {
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .contact-info p {
+            margin-bottom: 10px;
+        }
+        .contact-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-color);
+            font-size: 0.9em;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 15px;
+            }
+            .hero-section {
+                padding: 60px 15px;
+            }
+            .hero-section h1 {
+                font-size: 2.5em;
+            }
+            .hero-section p {
+                font-size: 1.2em;
+            }
+            section {
+                padding: 20px 0;
+            }
+            section h2 {
+                font-size: 1.8em;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <h1>{{ website_data.hero_section.heading | default('Welcome to Our Website!') }}</h1>
+        <p>{{ website_data.hero_section.subheading | default('Your success is our priority.') }}</p>
+    </div>
+
+    <div class="container">
+        <section class="about-section">
+            <h2>{{ website_data.about_section.heading | default('About Us') }}</h2>
+            <p>{{ website_data.about_section.text | default('Learn more about our company and what we do.') }}</p>
+        </section>
+
+        <!-- ✅ Updated Services Section -->
+        <section class="services-section">
+            <h2>{{ website_data.services_section.heading | default('Our Services') }}</h2>
+            <div class="services-grid">
+                {% set services = website_data.get('services_section', {}).get('items', []) %}
+                {% if services %}
+                    {% for service in services %}
+                        <div class="service-item">
+                            <h3>{{ service.title | default('Service Title') }}</h3>
+                            <p>{{ service.description | default('Description of the service.') }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No services listed yet.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <h2>{{ website_data.contact_section.heading | default('Contact Us') }}</h2>
+            <div class="contact-info">
+                <p>Email: <a href="mailto:{{ website_data.contact_section.email | default('info@example.com') }}">{{ website_data.contact_section.email | default('info@example.com') }}</a></p>
+                <p>Phone: <a href="tel:{{ website_data.contact_section.phone | default('+1 (123) 456-7890') }}">{{ website_data.contact_section.phone | default('+1 (123) 456-7890') }}</a></p>
+                <p>Address: {{ website_data.contact_section.address | default('123 Business Rd, City, Country') }}</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; {{ current_year }} {{ website_data.title | default('AI Website Builder') }}. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentYear = new Date().getFullYear();
+            const footerText = document.querySelector('footer p');
+            if (footerText && footerText.textContent.includes('{{ current_year }}')) {
+                footerText.textContent = footerText.textContent.replace('{{ current_year }}', currentYear);
+            }
+        });
+    </script>
+</body>
+</html>
