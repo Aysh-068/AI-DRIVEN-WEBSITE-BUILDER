@@ -1,7 +1,8 @@
 Flask==3.0.3
 Flask-PyMongo==3.0.1
-Flask-Bcrypt==1.0.1  # <--- ADD THIS LINE
+Flask-Bcrypt==1.0.1
 Flask-JWT-Extended==4.6.0
+flask-cors==4.0.1  # <--- ADD THIS LINE
 python-dotenv==1.0.1
 google-api-core==2.11.0
 google-auth==2.29.0
